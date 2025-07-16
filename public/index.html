@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subsplash Calendar Link Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Subsplash Calendar Link Generator</h1>
+            <p>Create calendar subscription links and embed buttons for your Subsplash site</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <h2>Step 1: Enter Your Calendar Details</h2>
+                
+                <div class="form-group">
+                    <label for="calendarUrl">Subsplash Calendar URL</label>
+                    <input 
+                        type="url" 
+                        id="calendarUrl" 
+                        placeholder="https://yourchurch.subsplash.com/calendar"
+                        class="form-input"
+                    >
+                    <small>Paste your Subsplash calendar page URL</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="workerUrl">Cloudflare Worker URL</label>
+                    <input 
+                        type="url" 
+                        id="workerUrl" 
+                        placeholder="https://your-worker.workers.dev"
+                        class="form-input"
+                    >
+                    <small>Your deployed Cloudflare Worker URL</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="calendarId">Calendar ID (Optional)</label>
+                    <input 
+                        type="text" 
+                        id="calendarId" 
+                        placeholder="Leave blank for all calendars"
+                        class="form-input"
+                    >
+                    <small>Filter by specific calendar ID if needed</small>
+                </div>
+
+                <button id="generateBtn" class="btn btn-primary">Generate Links</button>
+            </section>
+
+            <section id="results" class="results-section hidden">
+                <h2>Step 2: Copy Your Links</h2>
+                
+                <div class="result-group">
+                    <h3>Direct Subscription Link</h3>
+                    <div class="link-container">
+                        <input type="text" id="subscriptionLink" readonly class="link-input">
+                        <button class="copy-btn" data-target="subscriptionLink">Copy</button>
+                    </div>
+                    <p class="help-text">Users can add this link directly to their calendar apps</p>
+                </div>
+
+                <div class="result-group">
+                    <h3>Calendar App Links</h3>
+                    <div class="app-links">
+                        <a id="googleLink" href="#" target="_blank" class="app-link google">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor" d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z"/>
+                            </svg>
+                            Add to Google Calendar
+                        </a>
+                        <a id="outlookLink" href="#" target="_blank" class="app-link outlook">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor" d="M7,2V22H17V24H7A2,2 0 0,1 5,22V2A2,2 0 0,1 7,0H21A2,2 0 0,1 23,2V18H21V2H7Z"/>
+                            </svg>
+                            Add to Outlook
+                        </a>
+                        <div class="app-link-note">
+                            <strong>Apple Calendar:</strong> Copy the subscription link above and add it manually in Calendar app
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-group">
+                    <h3>Embed Button for Your Site</h3>
+                    <div class="button-preview" id="buttonPreview">
+                        <!-- Button preview will be inserted here -->
+                    </div>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-tab="html">HTML</button>
+                        <button class="tab-btn" data-tab="javascript">JavaScript Widget</button>
+                    </div>
+                    
+                    <div class="code-container">
+                        <div class="code-panel active" id="htmlCode">
+                            <textarea id="htmlCodeText" readonly class="code-textarea"></textarea>
+                            <button class="copy-btn" data-target="htmlCodeText">Copy HTML</button>
+                        </div>
+                        <div class="code-panel" id="javascriptCode">
+                            <textarea id="jsCodeText" readonly class="code-textarea"></textarea>
+                            <button class="copy-btn" data-target="jsCodeText">Copy JavaScript</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-group">
+                    <h3>Instructions for Users</h3>
+                    <div class="instructions">
+                        <textarea id="instructionsText" readonly class="code-textarea"></textarea>
+                        <button class="copy-btn" data-target="instructionsText">Copy Instructions</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

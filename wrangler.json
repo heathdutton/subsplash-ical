@@ -1,0 +1,26 @@
+{
+  "name": "subsplash-ical",
+  "main": "src/index.js",
+  "compatibility_date": "2024-01-01",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "SUBSPLASH_ICAL",
+      "id": "3af872cb33ce43eb855ab22cc8ddeb50",
+      "preview_id": "3af872cb33ce43eb855ab22cc8ddeb50"
+    }
+  ],
+  "env": {
+    "production": {
+      "name": "subsplash-ical",
+      "kv_namespaces": [
+        {
+          "binding": "SUBSPLASH_ICAL",
+          "id": "3af872cb33ce43eb855ab22cc8ddeb50"
+        }
+      ]
+    }
+  }
+}
