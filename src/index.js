@@ -1263,57 +1263,42 @@ function formatDateToICal(date, allDay = false) {
 }
 
 function formatDateToICalWithTimezone(date, timezone) {
-  // Parse the date string without timezone conversion
-  // Subsplash provides dates like "2025-07-06T11:30:00" which should be
-  // interpreted as-is in the event's timezone, not converted
-  
-  // If date is already a string in ISO format, extract components directly
-  if (typeof date === 'string') {
-    // Match ISO date format: YYYY-MM-DDTHH:MM:SS or YYYY-MM-DD HH:MM:SS
-    const match = date.match(/(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})/);
-    if (match) {
-      const [, year, month, day, hours, minutes, seconds] = match;
-      return `${year}${month}${day}T${hours}${minutes}${seconds}`;
-    }
-  }
-  
-  // Fallback: parse as Date object if string parsing fails
+  // Parse the date to a Date object
   const d = new Date(date);
-  
-  // Extract components without timezone conversion
-  // Use string manipulation to avoid timezone issues
-  const isoString = d.toISOString();
-  const match = isoString.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
-  if (match) {
-    const [, year, month, day, hours, minutes, seconds] = match;
-    
-    // If the original date string had no timezone indicator, 
-    // we need to reverse the UTC conversion that Date() applied
-    if (typeof date === 'string' && !date.includes('Z') && !date.includes('+') && !date.includes('-')) {
-      // Calculate offset and adjust
-      const originalDate = new Date(date + 'Z'); // Force UTC interpretation
-      const adjustedYear = originalDate.getUTCFullYear();
-      const adjustedMonth = String(originalDate.getUTCMonth() + 1).padStart(2, '0');
-      const adjustedDay = String(originalDate.getUTCDate()).padStart(2, '0');
-      const adjustedHours = String(originalDate.getUTCHours()).padStart(2, '0');
-      const adjustedMinutes = String(originalDate.getUTCMinutes()).padStart(2, '0');
-      const adjustedSeconds = String(originalDate.getUTCSeconds()).padStart(2, '0');
-      
-      return `${adjustedYear}${adjustedMonth}${adjustedDay}T${adjustedHours}${adjustedMinutes}${adjustedSeconds}`;
-    }
-    
-    return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+
+  // Check if the date parsing was successful
+  if (isNaN(d.getTime())) {
+    console.error('Invalid date:', date);
+    return '';
   }
-  
-  // Last resort fallback
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  const hours = String(d.getHours()).padStart(2, '0');
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  const seconds = String(d.getSeconds()).padStart(2, '0');
-  
-  return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+
+  // Use Intl.DateTimeFormat to convert UTC time to the target timezone
+  // This properly handles DST and timezone offsets
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  const parts = formatter.formatToParts(d);
+  const partsObj = {};
+  parts.forEach(part => {
+    partsObj[part.type] = part.value;
+  });
+
+  const year = partsObj.year;
+  const month = partsObj.month;
+  const day = partsObj.day;
+  const hour = partsObj.hour;
+  const minute = partsObj.minute;
+  const second = partsObj.second;
+
+  return `${year}${month}${day}T${hour}${minute}${second}`;
 }
 
 // Parse various date formats from Subsplash API
